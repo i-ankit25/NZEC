@@ -6,6 +6,10 @@ import numpy as np
 import imutils
 import time
 import cv2
+from espeak import espeak
+import argparse
+classa = {}
+
 
 def classify_frame(net, inputQueue, outputQueue):
 	while True:
@@ -46,8 +50,8 @@ p.start()
 
 
 print("[INFO] starting video stream...")
-#vs = VideoStream(src=0).start()
-vs = VideoStream(usePiCamera=True).start()
+vs = VideoStream(src=0).start()
+#vs = VideoStream(usePiCamera=True).start()
 time.sleep(2)
 
 while True:
@@ -80,6 +84,15 @@ while True:
 			y = startY - 15 if startY - 15 > 15 else startY + 15
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+			x = label.split(':')[0]
+			if x in classa.keys():
+				if((time.time() - classa[x])>5):
+					classa[x] = time.time()
+					espeak.synth(x)
+			else:
+				classa[x] = time.time()
+				espeak.synth(x)
+
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
