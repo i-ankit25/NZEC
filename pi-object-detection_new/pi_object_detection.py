@@ -68,12 +68,16 @@ ap.add_argument("-c", "--confidence", type=float, default=0.6,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
+<<<<<<< HEAD
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
 	"dog", "horse", "motorbike", "person", "pottedplant", "sheep",
 	"sofa", "train", "tvmonitor"]
+=======
+CLASSES = ["background", "aeroplane","bicycle","bird","boat","bottle","bus","car","cat", "chair","cow","diningtable","dog","horse","motorbike", "person","pottedplant","sheep","sofa","train","tvmonitor"]
+>>>>>>> 1eb1bab9c1021ac922a5b3bd6f4da6c31896eff6
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # load our serialized model from disk
