@@ -19,6 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
 
@@ -58,12 +61,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendLoc() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            assert locationManager != null;
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Toast.makeText(this, "lat: " + location.getLatitude() + ", lon: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-        }
+        new Timer().scheduleAtFixedRate(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                            assert locationManager != null;
+                            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            Log.d(TAG, "sendLoc: lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
+
+                            // TODO: send to back end
+//                            Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + ", lon: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, 0, 2000);
     }
 
     private void listenAndSearch() {
