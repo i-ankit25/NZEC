@@ -27,6 +27,7 @@ while(True):
   
   for i in range(0, math.floor(num)):
     msg, _ = s.recvfrom(buff)
+    print(msg)
     data.append(msg)
   
   string_frame = b''.join(data)

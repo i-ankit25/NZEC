@@ -23,18 +23,31 @@ cap = cv.VideoCapture(0)
 cap.set(4, width)
 cap.set(3, height)
 
+# code to mark beginning of a frame : solving choppiness
+code = 'start'
+code = ('start' + (buff - len(code)) * 'a').encode('utf-8')
+
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # s.sendto(b'How you doin?', addr_model)
 
 while(cap.isOpened()):
   ret, frame = cap.read()
   if ret:
+    # send start code to both model and stream
+    s.sendto(code, addr_model)
+    s.sendto(code, addr_stream)
+    # frame is sending as a string
     data = frame.tostring()
-    for i in range(0, len(data), buff):
-      s.sendto(data[i : i + buff], addr_model)
 
-    # s.sendto(data, addr_model)
-    cv.imshow("frame", frame)
-    if cv.waitKey(25) & 0xFF == ord('q'):
+    for i in range(0, len(data), buff):
+      # send chunks to model and stream
+      s.sendto(data[i : i + buff], addr_model)
+      s.sendto(data[i : i + buff], addr_stream)
+
+      # show the video
+      cv.imshow('send', frame)
+    if cv.waitKey(1) & 0xFF == ord('q'):
       cv.destroyAllWindows()
       break
+  else:
+    break
