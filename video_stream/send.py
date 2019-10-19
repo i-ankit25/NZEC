@@ -6,8 +6,8 @@ import numpy as np
 import socket
 
 # addresses to stream to
-addr_model = ("127.0.0.1", 3000)
-addr_stream = ("127.0.0.1", 5000)
+addr_model = ("127.0.0.1", 5000)
+addr_stream = ("127.0.0.1", 3000)
 
 width = 640
 height = 480
@@ -28,7 +28,6 @@ code = 'start'
 code = ('start' + (buff - len(code)) * 'a').encode('utf-8')
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# s.sendto(b'How you doin?', addr_model)
 
 while(cap.isOpened()):
   ret, frame = cap.read()
@@ -36,6 +35,7 @@ while(cap.isOpened()):
     # send start code to both model and stream
     s.sendto(code, addr_model)
     s.sendto(code, addr_stream)
+
     # frame is sending as a string
     data = frame.tostring()
 
