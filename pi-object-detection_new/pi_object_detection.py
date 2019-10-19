@@ -57,9 +57,9 @@ def classify_frame(net, inputQueue, outputQueue):
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--prototxt", required=True,
+ap.add_argument("-p", "--prototxt", default="MobileNetSSD_deploy.prototxt.txt",
 	help="path to Caffe 'deploy' prototxt file")
-ap.add_argument("-m", "--model", required=True,
+ap.add_argument("-m", "--model",default="MobileNetSSD_deploy.caffemodel" ,
 	help="path to Caffe pre-trained model")
 ap.add_argument("-c", "--confidence", type=float, default=0.6,
 	help="minimum probability to filter weak detections")
