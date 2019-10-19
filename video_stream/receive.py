@@ -18,23 +18,34 @@ buff = 512
 # 640 * 480 * 3 = 921600 / 512 = 1800
 num = (640 * 480 * 3) / buff
 
+# start code
+code = b'start'
+
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(addr_model)
 
-while(True):
-  # store chunks of frame
-  data = []
-  
-  for i in range(0, math.floor(num)):
-    msg, _ = s.recvfrom(buff)
-    print(msg)
-    data.append(msg)
-  
-  string_frame = b''.join(data)
-  frame = np.frombuffer(string_frame, dtype=np.uint8).reshape(height, width, 3)
-  frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-  cv.imshow('receive', frame)
-  if cv.waitKey(25) & 0xFF == ord('q'):
-    cv.destroyAllWindows()
+while True:
+  # hold chunks of a frame
+  chunks = []
+  # did we get the start buff signal thing
+  start = False
+  while len(chunks) < num:
+    chunk, _ = s.recvfrom(buff)
+    if start:
+      # if start signal already received then append to chunks
+      chunks.append(chunk)
+    elif chunk.startswith(code):
+      # if not yet got start signal then we get it here
+      start = True
+
+  # join the chunks
+  byte_frame = b''.join(chunks)
+
+  # rebuild the frame
+  frame = np.frombuffer(byte_frame, dtype=np.uint8).reshape(height, width, 3)
+
+  # show the frame
+  cv.imshow('recv', frame)
+  if cv.waitKey(1) & 0xFF == ord('q'):
     break
 
