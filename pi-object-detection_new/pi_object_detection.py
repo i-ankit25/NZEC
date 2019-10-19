@@ -16,24 +16,24 @@ import socket
 import math
 
 # model stream addr
-#addr_model = ("127.0.0.1", 8000)
+addr_model = ("127.0.0.1", 8000)
 
 # width and height of receiving video
-#height = 480
+height = 480
+width = 640
 
 # buffer to receive stuff into
-#buff = 512
+buff = 512
 
 # num of packets that make up one frame
 #640 * 480 * 3 = 921600 / 512 = 1800
-#num = (640 * 480 * 3) / buff
+num = (640 * 480 * 3) / buff
 
 # start code
-#code = b'start'
+code = b'start'
 
-#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#s.bind(addr_model)
-
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind(addr_model)
 
 def classify_frame(net, inputQueue, outputQueue):
 	# keep looping
@@ -102,19 +102,20 @@ fps = FPS().start()
 while True:
 	# grab the frame from the threaded video stream, resize it, and
 	# grab its imensions
+	
 	# hold chunks of a frame
-	#chunks = []
+	chunks = []
 	# did we get the start buff signal thing
-	#start = False
-	#while len(chunks) < num:
-	#	chunk, _ = s.recvfrom(buff)
+	start = False
+	while len(chunks) < num:
+		chunk, _ = s.recvfrom(buff)
 		# if start signal already received then append to chunks
-	#	chunks.append(chunk)
+		chunks.append(chunk)
 	# join the chunks
-	#byte_frame = b''.join(chunks)
+	byte_frame = b''.join(chunks)
 
 	# rebuild the frame
-	#frame = np.frombuffer(byte_frame, dtype=np.uint8).reshape(height, width, 3)
+	frame = np.frombuffer(byte_frame, dtype=np.uint8).reshape(height, width, 3)
 	frame=vs.read()
 	frame = imutils.resize(frame, width=400)
 	(fH, fW) = frame.shape[:2]
