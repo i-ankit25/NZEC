@@ -19,6 +19,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     private Button searchBtn, locBtn, toggleBtn;
+    private String BASE_URL = "http://192.168.157.121:5000";
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchBtn.setOnClickListener(this);
         locBtn.setOnClickListener(this);
         toggleBtn.setOnClickListener(this);
+
+        requestQueue = Volley.newRequestQueue(this);
 
         sendLoc();
     }
@@ -70,6 +85,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             Log.d(TAG, "sendLoc: lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
 
+                            try {
+                                JSONObject loc = new JSONObject();
+                                loc.put("lat", location.getLatitude());
+                                loc.put("lon", location.getLongitude());
+                                sendRequest(loc.toString(), "/location");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             // TODO: send to back end
 //                            Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + ", lon: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
                         }
@@ -89,9 +113,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
             if (resultCode == RESULT_OK && data != null) {
-                // TODO: send to backend
                 Log.d(TAG, "onActivityResult: " + data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+
+                try {
+                    JSONObject text = new JSONObject();
+                    text.put("text", data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+                    sendRequest(text.toString(), "/location");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+
+    private void sendRequest(final String requestBody, String endpoint) {
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL + endpoint, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "onResponse: " + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        };
+
+        requestQueue.add(request);
     }
 }
