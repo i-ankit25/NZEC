@@ -7,7 +7,7 @@ function App() {
     <div className="App">
      <h1>Video Streaming Demonstration</h1>
      <br/>
-     <img id="bg" src="http://localhost:5000/video_feed" width="1200" height="900"></img>
+     <img id="bg" src="http://localhost:5000/video_feed" width="800" height="600"></img>
     </div>
   );
 }
