@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchBtn.setOnClickListener(this);
         locBtn.setOnClickListener(this);
         toggleBtn.setOnClickListener(this);
+
+        sendLoc();
     }
 
     @Override
@@ -46,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btn_search:
                 listenAndSearch();
-                break;
-            case R.id.btn_loc:
-                sendLoc();
                 break;
             case R.id.btn_toggle:
                 toggle();
