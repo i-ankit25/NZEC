@@ -45,6 +45,8 @@ def postsearch():
         return
     s = request.json['text']
     print(s)
+    file = open('../search.txt', 'w')
+    file.write(s)
     return jsonify("text", "got it")
 
 @app.route('/toggle', methods=['POST'])
