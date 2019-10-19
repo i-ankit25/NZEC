@@ -1,26 +1,33 @@
 from flask import Flask, render_template, Response
 from camera import VideoCamera
 import cv2 as cv
+import numpy
 
 import socket
 
-addr_stream = ("127.0.0.1", 3000)
-addr_model = ("127.0.0.1", 7000)
+
+cap = cv.VideoCapture(0)
+
+# addr_stream = ("127.0.0.1", 3000)
+addr_model = ("127.0.0.1", 8000)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 buff = 512
 
 app = Flask(__name__)
 
-cap = cv.VideoCapture(0)
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 def gen(camera):
+    print("hello")
+    # cap = cv.VideoCapture(0)
+    print("world")
     while True:
-        _, frame = cap.read()
+        r, frame = cap.read()
         # frame is sending as a string
         data = frame.tostring()
 
