@@ -6,13 +6,14 @@ import numpy as np
 import imutils
 import time
 import cv2
+import argparse
 
 def classify_frame(net, inputQueue, outputQueue):
 	while True:
 		if not inputQueue.empty():
 			frame = inputQueue.get()
 			frame = cv2.resize(frame, (300,300))
-			blob = cv2.dnn.blobFromImages(frame, 0.007843,
+			blob = cv2.dnn.blobFromImage(frame, 0.007843,
 				(300, 300), 127.5)
 
 			net.setInput(blob)
@@ -29,7 +30,7 @@ ap.add_argument("-c", "--confidence", type=float, default=0.6,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
-CLASSES = ["background", "aeroplane","bicycle","bird","boat","bottle","bus","car","cat", "chair","cow","diningtable","dog","horse","motorbike", "person","potted plant","sheep","sofa","train","tvmonitor"]
+CLASSES = ["background", "aeroplane","bicycle","bird","boat","bottle","bus","car","cat", "chair","cow","diningtable","dog","horse","motorbike", "person","pottedplant","sheep","sofa","train","tvmonitor"]
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 print("[INFO] loading model...")
