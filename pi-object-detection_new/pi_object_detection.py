@@ -11,9 +11,9 @@ def classify_frame(net, inputQueue, outputQueue):
 	while True:
 		if not inputQueue.empty():
 			frame = inputQueue.get()
-			frame = cv2.resize(frame, (224,224))
-			blob = cv2.dnn.blobFromImage(frame, 0.007843,
-				(224, 224), 127.5)
+			frame = cv2.resize(frame, (300,300))
+			blob = cv2.dnn.blobFromImages(frame, 0.007843,
+				(300, 300), 127.5)
 
 			net.setInput(blob)
 			detections = net.forward()
@@ -29,8 +29,8 @@ ap.add_argument("-c", "--confidence", type=float, default=0.6,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
-CLASSES = ["background", "bottle", "chair", "diningtable", "person","sofa", "tvmonitor"]
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))#
+CLASSES = ["background", "aeroplane","bicycle","bird","boat","bottle","bus","car","cat", "chair","cow","diningtable","dog","horse","motorbike", "person","potted plant","sheep","sofa","train","tvmonitor"]
+COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
