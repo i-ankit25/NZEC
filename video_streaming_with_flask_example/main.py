@@ -4,8 +4,8 @@ import cv2 as cv
 
 import socket
 
-# addr_stream = ("127.0.0.1", 3000)
-addr_model = ("127.0.0.1", 8000)
+addr_stream = ("127.0.0.1", 3000)
+addr_model = ("127.0.0.1", 7000)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 buff = 512

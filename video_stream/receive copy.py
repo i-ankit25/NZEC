@@ -5,8 +5,8 @@ import math
 import numpy as np
 import cv2 as cv
 
-addr_model = ("127.0.0.1", 3000)
-# addr_stream = ("127.0.0.1", 7000)
+# addr_model = ("127.0.0.1", 3000)
+addr_stream = ("127.0.0.1", 7000)
 
 # width and height of receiving video
 width = 640
@@ -24,7 +24,7 @@ code = b'start'
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind(addr_model)
+s.bind(addr_stream)
 
 while True:
   # hold chunks of a frame
