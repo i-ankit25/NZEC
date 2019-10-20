@@ -1,0 +1,6 @@
+cat
+dog
+tv
+plane
+chair
+stuff
