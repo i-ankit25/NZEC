@@ -11,7 +11,7 @@ import argparse
 import imutils
 import time
 import cv2
-from espeak import espeak
+from gtts import gTTS
 import os
 import socket
 import math
@@ -194,9 +194,9 @@ while True:
 				search(f1,1,label)
 			else:
 				if(time.time() - objectTime >= 30):	
-					search("",0,label)
+					#search("",0,label)
 				else:
-					search(f1,1,label) 
+					#search(f1,1,label) 
 				
 	# show the output frame
 	cv2.imshow("Frame", frame)
