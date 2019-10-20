@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     private Button searchBtn, locBtn, toggleBtn;
-    private String BASE_URL = "http://192.168.157.121:5000";
+    private String BASE_URL = "http://192.168.43.125:5000";
     private RequestQueue requestQueue;
 
     @Override
@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_search:
                 listenAndSearch();
                 break;
+            case R.id.btn_loc:
+                sendLoc();
+                break;
             case R.id.btn_toggle:
                 toggle();
                 break;
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void toggle() {
-        // TODO: just hit this end-point
+        sendRequest("", "/toggle");
     }
 
     private void sendLoc() {
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 e.printStackTrace();
                             }
 
-                            // TODO: send to back end
 //                            Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + ", lon: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     JSONObject text = new JSONObject();
                     text.put("text", data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
-                    sendRequest(text.toString(), "/location");
+                    sendRequest(text.toString(), "/search");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: " + error.getMessage());
+                Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         }) {
             @Override

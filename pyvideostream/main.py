@@ -63,13 +63,26 @@ def postsearch():
 @app.route('/toggle', methods=['POST'])
 def togglemode():
     toggleRunMode()
-    return jsonify("var", os.environ['CURRENT'])
+    return jsonify("text", "got it")
 
 def toggleRunMode():
-    if os.environ['CURRENT'] == '1':
-        os.environ['CURRENT'] = '0'
+    file = open('../mode.txt', 'r')
+    s = file.read()
+    file.close()
+    print(s)
+    print(type(s))
+    if s != 'human':
+        # print('here')
+        file = open('../mode.txt', 'w')
+        file.truncate(0)
+        file.write('human')
     else:
-        os.environ['CURRENT'] = '1'
+        # print('there')
+        file = open('../mode.txt', 'w')
+        file.truncate(0)
+        file.write('model')
+
+    file.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
