@@ -11,7 +11,7 @@ import argparse
 import imutils
 import time
 import cv2
-from gtts import gTTS
+import talkey
 import os
 import socket
 import math
@@ -38,6 +38,7 @@ import math
 
 classa = {}
 objectTime = time.time()
+tts = talkey.Talkey()
 
 def search (searchString,mode,label):
 	if(mode==0):
@@ -45,17 +46,17 @@ def search (searchString,mode,label):
 		if x in classa.keys():
 			if((time.time() - classa[x])>10):
 				classa[x] = time.time()
-				espeak.synth(x)
+				tts.say(x)
 				time.sleep(0.5)
 		else:
 			classa[x] = time.time()
-			espeak.synth(x)
+			tts.say(x)
 			time.sleep(0.5)
 	else:
 		x = label.split(':')[0]
 		if( x == searchString ):
-			print 'found'
-			espeak.synth( x + 'found')
+			print ('found')
+			tts.say( x + 'found')
 
 
 
@@ -186,17 +187,17 @@ while True:
 			y = startY - 15 if startY - 15 > 15 else startY + 15
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
-			f = open('/home/suvid/Documents/NZEC/search.txt','r')
-			if (os.stat('/home/suvid/Documents/NZEC/search.txt').st_size != 0):
+			f = open('/home/ankit/NZEC/search.txt','r')
+			if (os.stat('/home/ankit/NZEC/search.txt').st_size != 0):
 				f1 = f.readline().rstrip('\n')
 				objectTime=time.time()
-				open('/home/suvid/Documents/NZEC/search.txt', 'w').close()
-				#search(f1,1,label)
+				open('/home/ankit/NZEC/search.txt', 'w').close()
+				search(f1,1,label)
 			else:
-				if(time.time() - objectTime >= 30):	
-					#search("",0,label)
+				if(time.time() - objectTime >= 10):	
+					search("",0,label)
 				else:
-					#search(f1,1,label) 
+					search(f1,1,label) 
 				
 	# show the output frame
 	cv2.imshow("Frame", frame)
