@@ -17,52 +17,51 @@ import socket
 import math
 
 # model stream addr
-#addr_model = ("127.0.0.1", 8000)
+# addr_model = ("127.0.0.1", 8000)
 
 # width and height of receiving video
-#height = 480
-#width = 640
+# height = 480
+# width = 640
 
 # buffer to receive stuff into
-#buff = 512
+# buff = 512
 
 # num of packets that make up one frame
-#640 * 480 * 3 = 921600 / 512 = 1800
-#num = (640 * 480 * 3) / buff
+# 640 * 480 * 3 = 921600 / 512 = 1800
+# num = (640 * 480 * 3) / buff
 
 # start code
-#code = b'start'
+# code = b'start'
 
-#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#s.bind(addr_model)
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# s.bind(addr_model)
 
 classa = {}
 objectTime = time.time()
 
-def search (searchString,mode,label):
-	if(mode==0):
+
+def search(searchString, mode, label):
+	f2 = open('/home/ankit/NZEC/audio.txt','w')
+	if(mode == 0):
 		x = label.split(':')[0]
 		if x in classa.keys():
-			if((time.time() - classa[x])>10):
-			    classa[x] = time.time()
-				f2=open('/home/ankit/NZEC/audio.txt','w')
-	            f2.write(x)
-	            f2.close()
+			if((time.time() - classa[x]) > 10):
+				classa[x] = time.time()
+				f2.write(x)
+				f2.close()
 				time.sleep(0.5)
 		else:
 			classa[x] = time.time()
-			f2=open('/home/ankit/NZEC/audio.txt','w')
-	        f2.write(x)
-	        f2.close()
+			f2.write(x)
+			f2.close()
 			time.sleep(0.5)
 	else:
 		x = label.split(':')[0]
 		if( x == searchString ):
 			print ('found')
-	        f2=open('/home/ankit/NZEC/audio.txt','w')
 			f2.write( x + 'found')
-	        f2.close()
-	        time.sleep(0.5)
+			f2.close()
+			time.sleep(0.5)
 
 
 
@@ -125,7 +124,7 @@ p.start()
 # and initialize the FPS counter
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
-#vs = VideoStream(usePiCamera=True).start()
+# vs = VideoStream(usePiCamera=True).start()
 time.sleep(2)
 fps = FPS().start()
 
@@ -135,18 +134,18 @@ while True:
 	# grab its imensions
 	
 	# hold chunks of a frame
-	#chunks = []
+	# chunks = []
 	# did we get the start buff signal thing
-	#start = False
-	#while len(chunks) < num:
-		#chunk, _ = s.recvfrom(buff)
+	# start = False
+	# while len(chunks) < num:
+		# chunk, _ = s.recvfrom(buff)
 		# if start signal already received then append to chunks
-		#chunks.append(chunk)
+		# chunks.append(chunk)
 	# join the chunks
-	#byte_frame = b''.join(chunks)
+	# byte_frame = b''.join(chunks)
 
 	# rebuild the frame
-	#frame = np.frombuffer(byte_frame, dtype=np.uint8).reshape(height, width, 3)
+	# frame = np.frombuffer(byte_frame, dtype=np.uint8).reshape(height, width, 3)
 	frame=vs.read()
 	frame = imutils.resize(frame, width=400)
 	(fH, fW) = frame.shape[:2]
@@ -194,7 +193,7 @@ while True:
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 			f = open('/home/ankit/NZEC/search.txt','r')
-                        open('/home/ankit/NZEC/audio.txt','w').close()
+			open('/home/ankit/NZEC/audio.txt','w').close()
 			if (os.stat('/home/ankit/NZEC/search.txt').st_size != 0):
 				f1 = f.readline().rstrip('\n')
 				objectTime=time.time()

@@ -38,25 +38,31 @@ import math
 
 classa = {}
 objectTime = time.time()
-tts = talkey.Talkey()
 
 def search (searchString,mode,label):
 	if(mode==0):
 		x = label.split(':')[0]
 		if x in classa.keys():
 			if((time.time() - classa[x])>10):
-				classa[x] = time.time()
-				tts.say(x)
+			    classa[x] = time.time()
+				f2=open('/home/ankit/NZEC/audio.txt','w')
+	            f2.write(x)
+	            f2.close()
 				time.sleep(0.5)
 		else:
 			classa[x] = time.time()
-			tts.say(x)
+			f2=open('/home/ankit/NZEC/audio.txt','w')
+	        f2.write(x)
+	        f2.close()
 			time.sleep(0.5)
 	else:
 		x = label.split(':')[0]
 		if( x == searchString ):
 			print ('found')
-			tts.say( x + 'found')
+	        f2=open('/home/ankit/NZEC/audio.txt','w')
+			f2.write( x + 'found')
+	        f2.close()
+	        time.sleep(0.5)
 
 
 
@@ -188,6 +194,7 @@ while True:
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 			f = open('/home/ankit/NZEC/search.txt','r')
+                        open('/home/ankit/NZEC/audio.txt','w').close()
 			if (os.stat('/home/ankit/NZEC/search.txt').st_size != 0):
 				f1 = f.readline().rstrip('\n')
 				objectTime=time.time()
