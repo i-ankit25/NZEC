@@ -41,7 +41,7 @@ objectTime = time.time()
 
 
 def search(searchString, mode, label):
-	f2 = open('/home/ankit/NZEC/audio.txt','w')
+	f2 = open('/home/pi/Desktop/NZEC/audio.txt','w')
 	if(mode == 0):
 		x = label.split(':')[0]
 		if x in classa.keys():
@@ -192,12 +192,11 @@ while True:
 			y = startY - 15 if startY - 15 > 15 else startY + 15
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
-			f = open('/home/ankit/NZEC/search.txt','r')
-			open('/home/ankit/NZEC/audio.txt','w').close()
-			if (os.stat('/home/ankit/NZEC/search.txt').st_size != 0):
+			f = open('/home/pi/Desktop/NZEC/search.txt','r')
+			if (os.stat('/home/pi/Desktop/NZEC/search.txt').st_size != 0):
 				f1 = f.readline().rstrip('\n')
 				objectTime=time.time()
-				open('/home/ankit/NZEC/search.txt', 'w').close()
+				open('/home/pi/Desktop/NZEC/search.txt', 'w').close()
 				search(f1,1,label)
 			else:
 				if(time.time() - objectTime >= 10):	

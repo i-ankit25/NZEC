@@ -73,6 +73,11 @@ def toggleRunMode():
 def getaudio():
     file = open('../audio.txt', 'r')
     lines = file.readlines()
+    print(lines)
+    file.close()
+    file=open('../audio.txt', 'w')
+    file.truncate(0)
+    file.close()
     return jsonify(lines)
 
 if __name__ == '__main__':
