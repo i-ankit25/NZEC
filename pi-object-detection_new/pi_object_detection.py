@@ -191,7 +191,7 @@ while True:
 				f1 = f.readline().rstrip('\n')
 				objectTime=time.time()
 				open('/home/suvid/Documents/NZEC/search.txt', 'w').close()
-				search(f1,1,label)
+				#search(f1,1,label)
 			else:
 				if(time.time() - objectTime >= 30):	
 					#search("",0,label)
